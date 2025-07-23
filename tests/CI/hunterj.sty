@@ -1,0 +1,47 @@
+%%
+%% This is file `hunterj.sty',
+%% A font package that renders Hiragana as Hunter-style characters (ひらがな → Hunter script).
+%%
+%% Author: Eito Yoneyama
+%% Created: 2025/07/23
+%%
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{hunterj}[2025/07/23 v1.0 A font package that renders Hiragana as Hunter-style characters (ひらがな → Hunter script).]
+\RequirePackage{iftex}
+\ifLuaTeX
+  \RequirePackage{luatexja-fontspec}
+  \RequirePackage{expl3,xparse}
+  \newjfontfamily\hunterj[Path=./]{hunter-mozi.ttf}
+  \ExplSyntaxOn
+  \cs_new_protected:Npn \hunterj_text:n #1
+    {
+      {\hunterj #1}
+    }
+  \NewDocumentCommand \huntertext { m }
+    {
+      \tl_if_blank:nTF {#1}
+        {
+          \PackageError{hunterj}
+            {Empty argument to \string\huntertext}
+            {Please provide at least one hiragana character.}
+        }
+        {
+          % match hiragana (U+3041–3096) + ゝ(U+309D) + ゞ(U+309E) + ー(U+30FC)
+          \regex_match:nnTF { \A[ぁ-ゖゝゞー]+\z } {#1}
+            { \hunterj_text:n {#1} }
+            {
+              \PackageError{hunterj}
+                {Invalid characters in \string\huntertext}
+                {Only hiragana and common marks like ゝゞー are allowed.}
+            }
+        }
+    }
+  \ExplSyntaxOff
+\else
+  \PackageError{hunterj}
+    {This package can only be used with LuaLaTeX (LuaTeX-ja).}
+    {Please recompile your document with LuaLaTeX.}
+\fi
+%
+\endinput
+% EOF
