@@ -1,0 +1,22 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Compile test document
+        uses: xu-cheng/latex-action@v4
+        with:
+          root_file: tests/CI/CI.tex
+          work_in_root_file_dir: true
+          compiler: lualatex
+          args: -interaction=nonstopmode
