@@ -1,0 +1,10 @@
+[package]
+name = "hunterj"
+version = "1.0"
+entrypoint = "src/hunterj.sty"
+authors = ["Eito YONEYAMA"]
+license = "BSD 2-Clause"
+description = "A font package that renders Hiragana as Hunter-style characters (ひらがな → Hunter script)."
+
+[files]
+include = ["src/hunterj.sty", "src/hunter-mozi.ttf"]
